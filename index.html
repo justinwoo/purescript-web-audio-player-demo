@@ -1,0 +1,13 @@
+<!html>
+<head>
+  <link rel="manifest" href="manifest.json">
+</head>
+<script src="dist/app.js"></script>
+
+<script>
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('sw.js')
+    .then(function() { console.log("Service Worker Registered"); });
+}
+</script>

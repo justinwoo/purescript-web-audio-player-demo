@@ -1,0 +1,15 @@
+{
+  "name": "android-web-audio-player",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "pulp -w browserify --to dist/app.js",
+    "test": "pulp test"
+  },
+  "author": "",
+  "license": "MIT"
+}
