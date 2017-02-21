@@ -37087,7 +37087,6 @@ var Control_Monad_Eff = require("../Control.Monad.Eff");
 var Control_Monad_Eff_Exception = require("../Control.Monad.Eff.Exception");
 var Control_Monad_Eff_Ref = require("../Control.Monad.Eff.Ref");
 var DOM = require("../DOM");
-var DOM_Event_Event = require("../DOM.Event.Event");
 var DOM_File_FileList = require("../DOM.File.FileList");
 var DOM_File_Types = require("../DOM.File.Types");
 var DOM_HTML_HTMLInputElement = require("../DOM.HTML.HTMLInputElement");
@@ -37099,11 +37098,13 @@ var Unsafe_Coerce = require("../Unsafe.Coerce");
 var Data_Show = require("../Data.Show");
 var Halogen_HTML_Elements = require("../Halogen.HTML.Elements");
 var Halogen_HTML_Core = require("../Halogen.HTML.Core");
-var DOM_HTML_Indexed_InputType = require("../DOM.HTML.Indexed.InputType");
 var Data_Function = require("../Data.Function");
 var Halogen_Query_InputF = require("../Halogen.Query.InputF");
+var DOM_HTML_Indexed_InputType = require("../DOM.HTML.Indexed.InputType");
 var Control_Bind = require("../Control.Bind");
 var Halogen_Query_HalogenM = require("../Halogen.Query.HalogenM");
+var Data_Functor = require("../Data.Functor");
+var Halogen_Query = require("../Halogen.Query");
 var Control_Semigroupoid = require("../Control.Semigroupoid");
 var Control_Monad_Eff_Class = require("../Control.Monad.Eff.Class");
 var Control_Monad_State_Class = require("../Control.Monad.State.Class");
@@ -37111,8 +37112,6 @@ var Control_Monad_Aff_Class = require("../Control.Monad.Aff.Class");
 var Control_Applicative = require("../Control.Applicative");
 var Data_Semiring = require("../Data.Semiring");
 var Data_Ring = require("../Data.Ring");
-var Data_Functor = require("../Data.Functor");
-var Halogen_Query = require("../Halogen.Query");
 var Halogen_Component = require("../Halogen.Component");
 var Halogen_Aff_Util = require("../Halogen.Aff.Util");
 var Data_Unit = require("../Data.Unit");
@@ -37152,14 +37151,11 @@ var Fwd = (function () {
     return Fwd;
 })();
 var FileSet = (function () {
-    function FileSet(value0, value1) {
+    function FileSet(value0) {
         this.value0 = value0;
-        this.value1 = value1;
     };
     FileSet.create = function (value0) {
-        return function (value1) {
-            return new FileSet(value0, value1);
-        };
+        return new FileSet(value0);
     };
     return FileSet;
 })();
@@ -37186,33 +37182,38 @@ var newtypeFilePath = new Data_Newtype.Newtype(function (n) {
 }, ObjectURL);
 var ui = (function () {
     var render = function (state) {
-        return Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.h1_([ Halogen_HTML_Core.text("glorious web audio thing") ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.input([ Halogen_HTML_Properties.type_(Halogen_HTML_Core.inputTypeIsProp)(DOM_HTML_Indexed_InputType.InputFile.value), Halogen_HTML_Properties.prop(Halogen_HTML_Core.stringIsProp)(Data_Newtype.wrap(Halogen_HTML_Core.newtypePropName)("accept"))("audio/*"), Halogen_HTML_Events.onChange(Halogen_HTML_Events.input(FileSet.create)) ]) ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.audio([ Halogen_HTML_Properties.ref(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("audio")), Halogen_HTML_Properties.src(Data_Newtype.unwrap(newtypeFilePath)(Data_Maybe.fromMaybe(Data_Newtype.wrap(newtypeFilePath)(""))(state.file))), Halogen_HTML_Properties.controls(true), Halogen_HTML_Properties.autoplay(true) ])([  ]) ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Lg.value))) ])([ Halogen_HTML_Core.text("<<<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Md.value))) ])([ Halogen_HTML_Core.text("<<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Sm.value))) ])([ Halogen_HTML_Core.text("<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Sm.value))) ])([ Halogen_HTML_Core.text(">") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Md.value))) ])([ Halogen_HTML_Core.text(">>") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Lg.value))) ])([ Halogen_HTML_Core.text(">>>") ]) ]) ]);
+        return Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.h1_([ Halogen_HTML_Core.text("glorious web audio thing") ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.input([ Halogen_HTML_Properties.ref(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("input")), Halogen_HTML_Properties.type_(Halogen_HTML_Core.inputTypeIsProp)(DOM_HTML_Indexed_InputType.InputFile.value), Halogen_HTML_Properties.prop(Halogen_HTML_Core.stringIsProp)(Data_Newtype.wrap(Halogen_HTML_Core.newtypePropName)("accept"))("audio/*"), Halogen_HTML_Events.onChange(Halogen_HTML_Events.input_(FileSet.create)) ]) ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.audio([ Halogen_HTML_Properties.ref(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("audio")), Halogen_HTML_Properties.src(Data_Newtype.unwrap(newtypeFilePath)(Data_Maybe.fromMaybe(Data_Newtype.wrap(newtypeFilePath)(""))(state.file))), Halogen_HTML_Properties.controls(true), Halogen_HTML_Properties.autoplay(true) ])([  ]) ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Lg.value))) ])([ Halogen_HTML_Core.text("<<<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Md.value))) ])([ Halogen_HTML_Core.text("<<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Sm.value))) ])([ Halogen_HTML_Core.text("<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Sm.value))) ])([ Halogen_HTML_Core.text(">") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Md.value))) ])([ Halogen_HTML_Core.text(">>") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Lg.value))) ])([ Halogen_HTML_Core.text(">>>") ]) ]) ]);
     };
     var initialState = {
         file: Data_Maybe.Nothing.value
     };
     var $$eval = function (v) {
         if (v instanceof FileSet) {
-            return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_HTMLInputElement.files(Unsafe_Coerce.unsafeCoerce(DOM_Event_Event.target(v.value0)))))(function (v1) {
+            return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Data_Functor.map(Data_Functor.functorFn)(Unsafe_Coerce.unsafeCoerce)(Halogen_Query.getHTMLElementRef)(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("input")))(function (v1) {
                 return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)((function () {
-                    var $12 = Control_Bind.bind(Data_Maybe.bindMaybe)(Data_Nullable.toMaybe(v1))(function ($30) {
-                        return Data_Nullable.toMaybe(DOM_File_FileList.item(0)($30));
-                    });
-                    if ($12 instanceof Data_Maybe.Just) {
-                        return Control_Monad_State_Class.modify(Halogen_Query_HalogenM.monadStateHalogenM)(function (s) {
-                            var $13 = {};
-                            for (var $14 in s) {
-                                if ({}.hasOwnProperty.call(s, $14)) {
-                                    $13[$14] = s[$14];
-                                };
+                    if (v1 instanceof Data_Maybe.Just) {
+                        return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_HTMLInputElement.files(v1.value0)))(function (v2) {
+                            var $15 = Control_Bind.bind(Data_Maybe.bindMaybe)(Data_Nullable.toMaybe(v2))(function ($33) {
+                                return Data_Nullable.toMaybe(DOM_File_FileList.item(0)($33));
+                            });
+                            if ($15 instanceof Data_Maybe.Just) {
+                                return Control_Monad_State_Class.modify(Halogen_Query_HalogenM.monadStateHalogenM)(function (s) {
+                                    var $16 = {};
+                                    for (var $17 in s) {
+                                        if ({}.hasOwnProperty.call(s, $17)) {
+                                            $16[$17] = s[$17];
+                                        };
+                                    };
+                                    $16.file = Data_Maybe.Just.create(Data_Newtype.wrap(newtypeFilePath)($foreign.createObjectURL($15.value0)));
+                                    return $16;
+                                });
                             };
-                            $13.file = Data_Maybe.Just.create(Data_Newtype.wrap(newtypeFilePath)($foreign.createObjectURL($12.value0)));
-                            return $13;
+                            return Control_Monad_Aff_Class.liftAff(Halogen_Query_HalogenM.monadAffHalogenM(Control_Monad_Aff_Class.monadAffAff))(Control_Monad_Aff_Console.log("No file found"));
                         });
                     };
-                    return Control_Monad_Aff_Class.liftAff(Halogen_Query_HalogenM.monadAffHalogenM(Control_Monad_Aff_Class.monadAffAff))(Control_Monad_Aff_Console.log("No file found"));
+                    return Control_Monad_Aff_Class.liftAff(Halogen_Query_HalogenM.monadAffHalogenM(Control_Monad_Aff_Class.monadAffAff))(Control_Monad_Aff_Console.log("No input ref found"));
                 })())(function () {
-                    return Control_Applicative.pure(Halogen_Query_HalogenM.applicativeHalogenM)(v.value1);
+                    return Control_Applicative.pure(Halogen_Query_HalogenM.applicativeHalogenM)(v.value0);
                 });
             });
         };
@@ -37227,7 +37228,7 @@ var ui = (function () {
                 if (v.value1 instanceof Sm) {
                     return 5.0;
                 };
-                throw new Error("Failed pattern match at Main line 103, column 18 - line 107, column 7: " + [ v.value1.constructor.name ]);
+                throw new Error("Failed pattern match at Main line 107, column 18 - line 111, column 7: " + [ v.value1.constructor.name ]);
             })();
             var delta = skip * (function () {
                 if (v.value0 instanceof Bck) {
@@ -37235,7 +37236,7 @@ var ui = (function () {
                 };
                 return 1.0;
             })();
-            return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Data_Functor.map(Halogen_Query_HalogenM.functorHalogenM)(Unsafe_Coerce.unsafeCoerce)(Halogen_Query.getHTMLElementRef(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("audio"))))(function (v1) {
+            return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Data_Functor.map(Data_Functor.functorFn)(Unsafe_Coerce.unsafeCoerce)(Halogen_Query.getHTMLElementRef)(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("audio")))(function (v1) {
                 return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)((function () {
                     if (v1 instanceof Data_Maybe.Just) {
                         return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_HTMLMediaElement.currentTime(v1.value0)))(function (v2) {
@@ -37248,7 +37249,7 @@ var ui = (function () {
                 });
             });
         };
-        throw new Error("Failed pattern match at Main line 93, column 5 - line 100, column 16: " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Main line 93, column 5 - line 104, column 16: " + [ v.constructor.name ]);
     };
     return Halogen_Component.component(Halogen_HTML_Core.bifunctorHTML)({
         initialState: Data_Function["const"](initialState), 
@@ -37279,7 +37280,7 @@ module.exports = {
     createObjectURL: $foreign.createObjectURL
 };
 
-},{"../Control.Applicative":4,"../Control.Bind":10,"../Control.Monad.Aff":23,"../Control.Monad.Aff.AVar":16,"../Control.Monad.Aff.Class":17,"../Control.Monad.Aff.Console":18,"../Control.Monad.Eff":36,"../Control.Monad.Eff.Class":26,"../Control.Monad.Eff.Exception":30,"../Control.Monad.Eff.Ref":32,"../Control.Monad.State.Class":53,"../Control.Semigroupoid":65,"../DOM":115,"../DOM.Event.Event":67,"../DOM.File.FileList":74,"../DOM.File.Types":75,"../DOM.HTML.HTMLInputElement":79,"../DOM.HTML.HTMLMediaElement":84,"../DOM.HTML.Indexed.InputType":89,"../Data.Function":171,"../Data.Functor":178,"../Data.Maybe":222,"../Data.Newtype":232,"../Data.Nullable":235,"../Data.Ring":249,"../Data.Semiring":253,"../Data.Show":255,"../Data.Unit":273,"../Halogen":306,"../Halogen.Aff":282,"../Halogen.Aff.Util":281,"../Halogen.Component":284,"../Halogen.HTML":291,"../Halogen.HTML.Core":287,"../Halogen.HTML.Elements":288,"../Halogen.HTML.Events":289,"../Halogen.HTML.Properties":290,"../Halogen.Query":296,"../Halogen.Query.HalogenM":294,"../Halogen.Query.InputF":295,"../Halogen.VDom.Driver":300,"../Prelude":315,"../Unsafe.Coerce":318,"./foreign":307}],309:[function(require,module,exports){
+},{"../Control.Applicative":4,"../Control.Bind":10,"../Control.Monad.Aff":23,"../Control.Monad.Aff.AVar":16,"../Control.Monad.Aff.Class":17,"../Control.Monad.Aff.Console":18,"../Control.Monad.Eff":36,"../Control.Monad.Eff.Class":26,"../Control.Monad.Eff.Exception":30,"../Control.Monad.Eff.Ref":32,"../Control.Monad.State.Class":53,"../Control.Semigroupoid":65,"../DOM":115,"../DOM.File.FileList":74,"../DOM.File.Types":75,"../DOM.HTML.HTMLInputElement":79,"../DOM.HTML.HTMLMediaElement":84,"../DOM.HTML.Indexed.InputType":89,"../Data.Function":171,"../Data.Functor":178,"../Data.Maybe":222,"../Data.Newtype":232,"../Data.Nullable":235,"../Data.Ring":249,"../Data.Semiring":253,"../Data.Show":255,"../Data.Unit":273,"../Halogen":306,"../Halogen.Aff":282,"../Halogen.Aff.Util":281,"../Halogen.Component":284,"../Halogen.HTML":291,"../Halogen.HTML.Core":287,"../Halogen.HTML.Elements":288,"../Halogen.HTML.Events":289,"../Halogen.HTML.Properties":290,"../Halogen.Query":296,"../Halogen.Query.HalogenM":294,"../Halogen.Query.InputF":295,"../Halogen.VDom.Driver":300,"../Prelude":315,"../Unsafe.Coerce":318,"./foreign":307}],309:[function(require,module,exports){
 "use strict";
 
 // module Math

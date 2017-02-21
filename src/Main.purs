@@ -14,7 +14,6 @@ import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Exception (EXCEPTION)
 import Control.Monad.Eff.Ref (REF)
 import DOM (DOM)
-import DOM.Event.Event (Event, target)
 import DOM.File.FileList (item)
 import DOM.File.Types (File)
 import DOM.HTML.HTMLInputElement (files)
@@ -36,7 +35,7 @@ data SkipDir = Bck | Fwd
 data SkipSize = Sm | Md | Lg
 
 data Query a
-  = FileSet Event a
+  = FileSet a
   | Skip SkipDir SkipSize a
 
 type AppEffects eff =
@@ -65,9 +64,10 @@ ui =
         [ HH.h1_ [HH.text "glorious web audio thing"]
         , HH.div_
             [ HH.input
-              [ HP.type_ HP.InputFile
+              [ HP.ref $ wrap "input"
+              , HP.type_ HP.InputFile
               , HP.prop (wrap "accept")  "audio/*"
-              , HE.onChange (HE.input FileSet)
+              , HE.onChange (HE.input_ FileSet)
               ]
             ]
         , HH.div_
@@ -90,13 +90,17 @@ ui =
         ]
 
     eval :: Query ~> H.ComponentDSL State Query Void (AppEffects eff)
-    eval (FileSet e next) = do
-      nxs <- H.liftEff <<< files <<< unsafeCoerce <<< target $ e
-      case toMaybe nxs >>= toMaybe <<< item 0 of
-        Just file ->
-          H.modify \s ->
-            s {file = Just <<< wrap <<< createObjectURL $ file}
-        _ -> H.liftAff $ log "No file found"
+    eval (FileSet next) = do
+      input <- unsafeCoerce <$> H.getHTMLElementRef $ wrap "input"
+      case input of
+        Just el -> do
+          nxs <- H.liftEff <<< files $ el
+          case toMaybe nxs >>= toMaybe <<< item 0 of
+            Just file ->
+              H.modify \s ->
+                s {file = Just <<< wrap <<< createObjectURL $ file}
+            _ -> H.liftAff $ log "No file found"
+        _ -> H.liftAff $ log "No input ref found"
       pure next
 
     eval (Skip dir size next) = do
@@ -107,7 +111,7 @@ ui =
       let delta = skip * case dir of
             Bck -> -1.0
             _ -> 1.0
-      audio <- unsafeCoerce <$> H.getHTMLElementRef (wrap "audio")
+      audio <- unsafeCoerce <$> H.getHTMLElementRef $ wrap "audio"
       case audio of
         Just el -> do
           current <- H.liftEff $ currentTime el
