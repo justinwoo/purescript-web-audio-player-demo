@@ -61,34 +61,39 @@ ui =
 
     render :: State -> H.ComponentHTML Query
     render state =
-      HH.div_
-        [ HH.h1_ [HH.text "glorious web audio thing"]
-        , HH.div_
-            [ HH.input
-              [ HP.ref $ wrap "input"
-              , HP.type_ HP.InputFile
-              , HP.prop (wrap "accept")  "audio/*"
-              , HE.onChange (HE.input_ FileSet)
+      HH.div
+        [ HP.class_ $ wrap "container" ]
+        [ HH.div
+          [ HP.class_ $ wrap "root" ]
+          [ HH.h1_ [HH.text "glorious web audio thing"]
+          , HH.div_
+              [ HH.input
+                [ HP.ref $ wrap "input"
+                , HP.type_ HP.InputFile
+                , HP.prop (wrap "accept")  "audio/*"
+                , HE.onChange (HE.input_ FileSet)
+                ]
               ]
+          , HH.div_
+              [ HH.audio
+                [ HP.ref $ wrap "audio"
+                , HP.src $ unwrap $ fromMaybe (wrap "") state.file
+                , HP.controls true
+                , HP.autoplay true
+                ]
+              []
             ]
-        , HH.div_
-            [ HH.audio
-              [ HP.ref $ wrap "audio"
-              , HP.src $ unwrap $ fromMaybe (wrap "") state.file
-              , HP.controls true
-              , HP.autoplay true
+          , HH.div
+              [ HP.class_ $ wrap "buttons" ]
+              [ HH.button [HE.onClick (HE.input_ $ Skip Bck Lg)] [HH.text "<<<"]
+              , HH.button [HE.onClick (HE.input_ $ Skip Bck Md)] [HH.text "<<"]
+              , HH.button [HE.onClick (HE.input_ $ Skip Bck Sm)] [HH.text "<"]
+              , HH.button [HE.onClick (HE.input_ $ Skip Fwd Sm)] [HH.text ">"]
+              , HH.button [HE.onClick (HE.input_ $ Skip Fwd Md)] [HH.text ">>"]
+              , HH.button [HE.onClick (HE.input_ $ Skip Fwd Lg)] [HH.text ">>>"]
               ]
-            []
           ]
-        , HH.div_
-            [ HH.button [HE.onClick (HE.input_ $ Skip Bck Lg)] [HH.text "<<<"]
-            , HH.button [HE.onClick (HE.input_ $ Skip Bck Md)] [HH.text "<<"]
-            , HH.button [HE.onClick (HE.input_ $ Skip Bck Sm)] [HH.text "<"]
-            , HH.button [HE.onClick (HE.input_ $ Skip Fwd Sm)] [HH.text ">"]
-            , HH.button [HE.onClick (HE.input_ $ Skip Fwd Md)] [HH.text ">>"]
-            , HH.button [HE.onClick (HE.input_ $ Skip Fwd Lg)] [HH.text ">>>"]
-            ]
-        ]
+      ]
 
     eval :: Query ~> H.ComponentDSL State Query Void (AppEffects eff)
     eval (FileSet next) = do

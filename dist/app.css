@@ -1,0 +1,32 @@
+@media screen and (max-width: 600px) {
+  .container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+  }
+  .root {
+    width: 100%;
+  }
+  div + div {
+    margin-top: 40px;
+  }
+  h1 {
+    font-size: 64px;
+  }
+  input, audio {
+    width: 100%;
+    font-size: 24px;
+  }
+  .buttons {
+    display: flex;
+    flex-direction: row;
+  }
+  button {
+    flex: 1;
+    font-size: 24px;
+    background-color: lightgrey;
+    margin: 0 5px;
+    outline: none;
+  }
+}

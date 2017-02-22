@@ -4,7 +4,8 @@ self.addEventListener('install', function(e) {
       return cache.addAll([
         './purescript-web-audio-player-demo',
         './purescript-web-audio-player-demo/index.html',
-        './purescript-web-audio-player-demo/dist/app.js'
+        './purescript-web-audio-player-demo/dist/app.js',
+        './purescript-web-audio-player-demo/dist/app.css'
       ]);
     })
   );

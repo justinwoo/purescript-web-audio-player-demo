@@ -38895,8 +38895,8 @@ var Data_Newtype = require("../Data.Newtype");
 var Data_Nullable = require("../Data.Nullable");
 var Data_Show = require("../Data.Show");
 var Halogen_HTML_Elements = require("../Halogen.HTML.Elements");
-var Halogen_HTML_Core = require("../Halogen.HTML.Core");
 var Data_Function = require("../Data.Function");
+var Halogen_HTML_Core = require("../Halogen.HTML.Core");
 var Halogen_Query_InputF = require("../Halogen.Query.InputF");
 var DOM_HTML_Indexed_InputType = require("../DOM.HTML.Indexed.InputType");
 var Control_Bind = require("../Control.Bind");
@@ -38979,7 +38979,7 @@ var newtypeFilePath = new Data_Newtype.Newtype(function (n) {
 }, ObjectURL);
 var ui = (function () {
     var render = function (state) {
-        return Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.h1_([ Halogen_HTML_Core.text("glorious web audio thing") ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.input([ Halogen_HTML_Properties.ref(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("input")), Halogen_HTML_Properties.type_(Halogen_HTML_Core.inputTypeIsProp)(DOM_HTML_Indexed_InputType.InputFile.value), Halogen_HTML_Properties.prop(Halogen_HTML_Core.stringIsProp)(Data_Newtype.wrap(Halogen_HTML_Core.newtypePropName)("accept"))("audio/*"), Halogen_HTML_Events.onChange(Halogen_HTML_Events.input_(FileSet.create)) ]) ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.audio([ Halogen_HTML_Properties.ref(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("audio")), Halogen_HTML_Properties.src(Data_Newtype.unwrap(newtypeFilePath)(Data_Maybe.fromMaybe(Data_Newtype.wrap(newtypeFilePath)(""))(state.file))), Halogen_HTML_Properties.controls(true), Halogen_HTML_Properties.autoplay(true) ])([  ]) ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Lg.value))) ])([ Halogen_HTML_Core.text("<<<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Md.value))) ])([ Halogen_HTML_Core.text("<<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Sm.value))) ])([ Halogen_HTML_Core.text("<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Sm.value))) ])([ Halogen_HTML_Core.text(">") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Md.value))) ])([ Halogen_HTML_Core.text(">>") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Lg.value))) ])([ Halogen_HTML_Core.text(">>>") ]) ]) ]);
+        return Halogen_HTML_Elements.div([ Halogen_HTML_Properties.class_(Data_Newtype.wrap(Halogen_HTML_Core.newtypeClassName)("container")) ])([ Halogen_HTML_Elements.div([ Halogen_HTML_Properties.class_(Data_Newtype.wrap(Halogen_HTML_Core.newtypeClassName)("root")) ])([ Halogen_HTML_Elements.h1_([ Halogen_HTML_Core.text("glorious web audio thing") ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.input([ Halogen_HTML_Properties.ref(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("input")), Halogen_HTML_Properties.type_(Halogen_HTML_Core.inputTypeIsProp)(DOM_HTML_Indexed_InputType.InputFile.value), Halogen_HTML_Properties.prop(Halogen_HTML_Core.stringIsProp)(Data_Newtype.wrap(Halogen_HTML_Core.newtypePropName)("accept"))("audio/*"), Halogen_HTML_Events.onChange(Halogen_HTML_Events.input_(FileSet.create)) ]) ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.audio([ Halogen_HTML_Properties.ref(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("audio")), Halogen_HTML_Properties.src(Data_Newtype.unwrap(newtypeFilePath)(Data_Maybe.fromMaybe(Data_Newtype.wrap(newtypeFilePath)(""))(state.file))), Halogen_HTML_Properties.controls(true), Halogen_HTML_Properties.autoplay(true) ])([  ]) ]), Halogen_HTML_Elements.div([ Halogen_HTML_Properties.class_(Data_Newtype.wrap(Halogen_HTML_Core.newtypeClassName)("buttons")) ])([ Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Lg.value))) ])([ Halogen_HTML_Core.text("<<<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Md.value))) ])([ Halogen_HTML_Core.text("<<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Sm.value))) ])([ Halogen_HTML_Core.text("<") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Sm.value))) ])([ Halogen_HTML_Core.text(">") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Md.value))) ])([ Halogen_HTML_Core.text(">>") ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Lg.value))) ])([ Halogen_HTML_Core.text(">>>") ]) ]) ]) ]);
     };
     var initialState = {
         file: Data_Maybe.Nothing.value
@@ -39026,7 +39026,7 @@ var ui = (function () {
                 if (v.value1 instanceof Sm) {
                     return 5.0;
                 };
-                throw new Error("Failed pattern match at Main line 108, column 18 - line 112, column 7: " + [ v.value1.constructor.name ]);
+                throw new Error("Failed pattern match at Main line 113, column 18 - line 117, column 7: " + [ v.value1.constructor.name ]);
             })();
             var delta = skip * (function () {
                 if (v.value0 instanceof Bck) {
@@ -39049,7 +39049,7 @@ var ui = (function () {
                 });
             });
         };
-        throw new Error("Failed pattern match at Main line 94, column 5 - line 105, column 16: " + [ v.constructor.name ]);
+        throw new Error("Failed pattern match at Main line 99, column 5 - line 110, column 16: " + [ v.constructor.name ]);
     };
     return Halogen_Component.component(Halogen_HTML_Core.bifunctorHTML)({
         initialState: Data_Function["const"](initialState), 
