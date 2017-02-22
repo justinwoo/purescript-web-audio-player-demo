@@ -14,14 +14,15 @@ import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Exception (EXCEPTION)
 import Control.Monad.Eff.Ref (REF)
 import DOM (DOM)
+import DOM.Classy.HTMLElement (fromHTMLElement)
 import DOM.File.FileList (item)
 import DOM.File.Types (File)
 import DOM.HTML.HTMLInputElement (files)
 import DOM.HTML.HTMLMediaElement (currentTime, setCurrentTime)
+import DOM.HTML.Types (htmlAudioElementToHTMLMediaElement)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (class Newtype, unwrap, wrap)
 import Data.Nullable (toMaybe)
-import Unsafe.Coerce (unsafeCoerce)
 
 newtype ObjectURL = ObjectURL String
 derive instance newtypeFilePath :: Newtype ObjectURL _
@@ -91,8 +92,8 @@ ui =
 
     eval :: Query ~> H.ComponentDSL State Query Void (AppEffects eff)
     eval (FileSet next) = do
-      input <- unsafeCoerce <$> H.getHTMLElementRef $ wrap "input"
-      case input of
+      input <- H.getHTMLElementRef $ wrap "input"
+      case input >>= fromHTMLElement of
         Just el -> do
           nxs <- H.liftEff <<< files $ el
           case toMaybe nxs >>= toMaybe <<< item 0 of
@@ -111,11 +112,12 @@ ui =
       let delta = skip * case dir of
             Bck -> -1.0
             _ -> 1.0
-      audio <- unsafeCoerce <$> H.getHTMLElementRef $ wrap "audio"
-      case audio of
+      audio <- H.getHTMLElementRef $ wrap "audio"
+      case audio >>= fromHTMLElement of
         Just el -> do
-          current <- H.liftEff $ currentTime el
-          H.liftEff $ setCurrentTime (current + delta) el
+          let el' = htmlAudioElementToHTMLMediaElement el
+          current <- H.liftEff $ currentTime el'
+          H.liftEff $ setCurrentTime (current + delta) el'
         _ -> H.liftAff $ log "No audio ref found"
       pure next
 
