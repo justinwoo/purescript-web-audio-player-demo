@@ -10,9 +10,13 @@
     "purescript-prelude": "^2.4.0",
     "purescript-console": "^2.0.0",
     "purescript-halogen": "v1.0.0",
-    "purescript-dom-classy": "^1.3.0"
+    "purescript-dom-classy": "^1.3.0",
+    "purescript-dom": "a7d7a51c329800b26bf94a487616e9beed4e4474"
   },
   "devDependencies": {
     "purescript-psci-support": "^2.0.0"
+  },
+  "resolutions": {
+    "purescript-dom": "a7d7a51c329800b26bf94a487616e9beed4e4474"
   }
 }

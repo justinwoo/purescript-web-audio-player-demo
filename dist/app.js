@@ -311,7 +311,7 @@ var PS = {};
       };
   });
   var eqString = new Eq($foreign.refEq);
-  var eqInt = new Eq($foreign.refEq);    
+  var eqInt = new Eq($foreign.refEq);
   var eq = function (dict) {
       return dict.eq;
   };
@@ -636,16 +636,16 @@ var PS = {};
   var Control_Extend = PS["Control.Extend"];
   var Control_MonadZero = PS["Control.MonadZero"];
   var Control_Plus = PS["Control.Plus"];
+  var Data_Eq = PS["Data.Eq"];
   var Data_Functor_Invariant = PS["Data.Functor.Invariant"];
   var Data_Monoid = PS["Data.Monoid"];
+  var Data_Ord = PS["Data.Ord"];
   var Data_Functor = PS["Data.Functor"];
   var Control_Apply = PS["Control.Apply"];
   var Control_Applicative = PS["Control.Applicative"];
   var Control_Bind = PS["Control.Bind"];
   var Control_Monad = PS["Control.Monad"];
   var Data_Semigroup = PS["Data.Semigroup"];
-  var Data_Eq = PS["Data.Eq"];
-  var Data_Ord = PS["Data.Ord"];
   var Data_Ordering = PS["Data.Ordering"];
   var Data_Bounded = PS["Data.Bounded"];
   var Data_Show = PS["Data.Show"];
@@ -677,7 +677,7 @@ var PS = {};
               if (v2 instanceof Just) {
                   return v1(v2.value0);
               };
-              throw new Error("Failed pattern match at Data.Maybe line 214, column 1 - line 214, column 22: " + [ v.constructor.name, v1.constructor.name, v2.constructor.name ]);
+              throw new Error("Failed pattern match at Data.Maybe line 220, column 1 - line 220, column 22: " + [ v.constructor.name, v1.constructor.name, v2.constructor.name ]);
           };
       };
   };
@@ -704,7 +704,7 @@ var PS = {};
           if (v instanceof Nothing) {
               return Nothing.value;
           };
-          throw new Error("Failed pattern match at Data.Maybe line 67, column 3 - line 67, column 31: " + [ v.constructor.name, v1.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Maybe line 69, column 3 - line 69, column 31: " + [ v.constructor.name, v1.constructor.name ]);
       };
   });
   var bindMaybe = new Control_Bind.Bind(function () {
@@ -717,7 +717,7 @@ var PS = {};
           if (v instanceof Nothing) {
               return Nothing.value;
           };
-          throw new Error("Failed pattern match at Data.Maybe line 126, column 3 - line 126, column 24: " + [ v.constructor.name, v1.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Maybe line 128, column 3 - line 128, column 24: " + [ v.constructor.name, v1.constructor.name ]);
       };
   });
   exports["Nothing"] = Nothing;
@@ -943,9 +943,11 @@ var PS = {};
   var Data_Bifoldable = PS["Data.Bifoldable"];
   var Data_Bifunctor = PS["Data.Bifunctor"];
   var Data_Bitraversable = PS["Data.Bitraversable"];
+  var Data_Eq = PS["Data.Eq"];
   var Data_Foldable = PS["Data.Foldable"];
   var Data_Functor_Invariant = PS["Data.Functor.Invariant"];
   var Data_Monoid = PS["Data.Monoid"];
+  var Data_Ord = PS["Data.Ord"];
   var Data_Traversable = PS["Data.Traversable"];
   var Data_Functor = PS["Data.Functor"];
   var Control_Apply = PS["Control.Apply"];
@@ -954,8 +956,6 @@ var PS = {};
   var Control_Monad = PS["Control.Monad"];
   var Data_Show = PS["Data.Show"];
   var Data_Semigroup = PS["Data.Semigroup"];
-  var Data_Eq = PS["Data.Eq"];
-  var Data_Ord = PS["Data.Ord"];
   var Data_Ordering = PS["Data.Ordering"];
   var Data_Bounded = PS["Data.Bounded"];
   var Data_Semiring = PS["Data.Semiring"];
@@ -986,7 +986,7 @@ var PS = {};
           if (v1 instanceof Right) {
               return new Right(v(v1.value0));
           };
-          throw new Error("Failed pattern match at Data.Either line 35, column 3 - line 35, column 26: " + [ v.constructor.name, v1.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Either line 37, column 3 - line 37, column 26: " + [ v.constructor.name, v1.constructor.name ]);
       };
   });
   var either = function (v) {
@@ -998,7 +998,7 @@ var PS = {};
               if (v2 instanceof Right) {
                   return v1(v2.value0);
               };
-              throw new Error("Failed pattern match at Data.Either line 224, column 1 - line 224, column 26: " + [ v.constructor.name, v1.constructor.name, v2.constructor.name ]);
+              throw new Error("Failed pattern match at Data.Either line 230, column 1 - line 230, column 26: " + [ v.constructor.name, v1.constructor.name, v2.constructor.name ]);
           };
       };
   };
@@ -1011,7 +1011,7 @@ var PS = {};
               if (v2 instanceof Right) {
                   return new Right(v1(v2.value0));
               };
-              throw new Error("Failed pattern match at Data.Either line 42, column 3 - line 42, column 34: " + [ v.constructor.name, v1.constructor.name, v2.constructor.name ]);
+              throw new Error("Failed pattern match at Data.Either line 44, column 3 - line 44, column 34: " + [ v.constructor.name, v1.constructor.name, v2.constructor.name ]);
           };
       };
   });
@@ -1025,7 +1025,7 @@ var PS = {};
           if (v instanceof Right) {
               return Data_Functor.map(functorEither)(v.value0)(v1);
           };
-          throw new Error("Failed pattern match at Data.Either line 78, column 3 - line 78, column 28: " + [ v.constructor.name, v1.constructor.name ]);
+          throw new Error("Failed pattern match at Data.Either line 80, column 3 - line 80, column 28: " + [ v.constructor.name, v1.constructor.name ]);
       };
   });
   exports["Left"] = Left;
@@ -1590,6 +1590,7 @@ var PS = {};
   var Data_Bifoldable = PS["Data.Bifoldable"];
   var Data_Bifunctor = PS["Data.Bifunctor"];
   var Data_Bitraversable = PS["Data.Bitraversable"];
+  var Data_Eq = PS["Data.Eq"];
   var Data_Foldable = PS["Data.Foldable"];
   var Data_Functor_Invariant = PS["Data.Functor.Invariant"];
   var Data_HeytingAlgebra = PS["Data.HeytingAlgebra"];
@@ -1597,11 +1598,10 @@ var PS = {};
   var Data_Maybe_First = PS["Data.Maybe.First"];
   var Data_Monoid = PS["Data.Monoid"];
   var Data_Newtype = PS["Data.Newtype"];
+  var Data_Ord = PS["Data.Ord"];
   var Data_Traversable = PS["Data.Traversable"];
   var Data_Show = PS["Data.Show"];
   var Data_Semigroup = PS["Data.Semigroup"];
-  var Data_Eq = PS["Data.Eq"];
-  var Data_Ord = PS["Data.Ord"];
   var Data_Ordering = PS["Data.Ordering"];
   var Data_Bounded = PS["Data.Bounded"];
   var Control_Semigroupoid = PS["Control.Semigroupoid"];
@@ -1664,7 +1664,15 @@ var PS = {};
           });
       };
   };
+  var gets = function (dictMonadState) {
+      return function (f) {
+          return state(dictMonadState)(function (s) {
+              return new Data_Tuple.Tuple(f(s), s);
+          });
+      };
+  };
   exports["MonadState"] = MonadState;
+  exports["gets"] = gets;
   exports["modify"] = modify;
   exports["state"] = state;
 })(PS["Control.Monad.State.Class"] = PS["Control.Monad.State.Class"] || {});
@@ -4370,9 +4378,46 @@ var PS = {};
 (function(exports) {
     "use strict";
 
+  exports.createObjectURL = function (fileOrBlob) {
+    return function (URL) {
+      return function () {
+        return URL.createObjectURL(fileOrBlob);
+      };
+    };
+  };
+
+  exports.revokeObjectURL = function (objectURL) {
+    return function (URL) {
+      return function () {
+        return URL.revokeObjectURL(objectURL);
+      };
+    };
+  };
+})(PS["DOM.HTML.URL"] = PS["DOM.HTML.URL"] || {});
+(function(exports) {
+  // Generated by psc version 0.10.7
+  "use strict";
+  var $foreign = PS["DOM.HTML.URL"];
+  var Control_Monad_Eff = PS["Control.Monad.Eff"];
+  var DOM = PS["DOM"];
+  var DOM_File_Types = PS["DOM.File.Types"];
+  var DOM_HTML_Types = PS["DOM.HTML.Types"];
+  var Data_Unit = PS["Data.Unit"];
+  exports["createObjectURL"] = $foreign.createObjectURL;
+  exports["revokeObjectURL"] = $foreign.revokeObjectURL;
+})(PS["DOM.HTML.URL"] = PS["DOM.HTML.URL"] || {});
+(function(exports) {
+    "use strict";
+
   exports.document = function (window) {
     return function () {
       return window.document;
+    };
+  };
+
+  exports.url = function (window) {
+    return function () {
+      return window.URL;
     };
   };
 })(PS["DOM.HTML.Window"] = PS["DOM.HTML.Window"] || {});
@@ -4388,6 +4433,7 @@ var PS = {};
   var Prelude = PS["Prelude"];
   var Data_Functor = PS["Data.Functor"];
   exports["document"] = $foreign.document;
+  exports["url"] = $foreign.url;
 })(PS["DOM.HTML.Window"] = PS["DOM.HTML.Window"] || {});
 (function(exports) {
     "use strict";                                             
@@ -8055,14 +8101,9 @@ var PS = {};
   };
   exports["runUI"] = runUI;
 })(PS["Halogen.VDom.Driver"] = PS["Halogen.VDom.Driver"] || {});
-(function(exports) {exports.createObjectURL = function (file) {
-    return URL.createObjectURL(file);
-  };
-})(PS["Main"] = PS["Main"] || {});
 (function(exports) {
   // Generated by psc version 0.10.7
   "use strict";
-  var $foreign = PS["Main"];
   var Prelude = PS["Prelude"];
   var Halogen = PS["Halogen"];
   var Halogen_Aff = PS["Halogen.Aff"];
@@ -8079,10 +8120,12 @@ var PS = {};
   var DOM = PS["DOM"];
   var DOM_Classy_HTMLElement = PS["DOM.Classy.HTMLElement"];
   var DOM_File_FileList = PS["DOM.File.FileList"];
-  var DOM_File_Types = PS["DOM.File.Types"];
+  var DOM_HTML = PS["DOM.HTML"];
   var DOM_HTML_HTMLInputElement = PS["DOM.HTML.HTMLInputElement"];
   var DOM_HTML_HTMLMediaElement = PS["DOM.HTML.HTMLMediaElement"];
   var DOM_HTML_Types = PS["DOM.HTML.Types"];
+  var DOM_HTML_URL = PS["DOM.HTML.URL"];
+  var DOM_HTML_Window = PS["DOM.HTML.Window"];
   var Data_Maybe = PS["Data.Maybe"];
   var Data_Newtype = PS["Data.Newtype"];
   var Data_Nullable = PS["Data.Nullable"];
@@ -8098,13 +8141,13 @@ var PS = {};
   var Control_Semigroupoid = PS["Control.Semigroupoid"];
   var Control_Monad_Eff_Class = PS["Control.Monad.Eff.Class"];
   var Control_Monad_State_Class = PS["Control.Monad.State.Class"];
-  var Control_Monad_Aff_Class = PS["Control.Monad.Aff.Class"];
   var Control_Applicative = PS["Control.Applicative"];
+  var Data_Unit = PS["Data.Unit"];
+  var Control_Monad_Aff_Class = PS["Control.Monad.Aff.Class"];
   var Data_Semiring = PS["Data.Semiring"];
   var Data_Ring = PS["Data.Ring"];
   var Halogen_Component = PS["Halogen.Component"];
-  var Halogen_Aff_Util = PS["Halogen.Aff.Util"];
-  var Data_Unit = PS["Data.Unit"];        
+  var Halogen_Aff_Util = PS["Halogen.Aff.Util"];        
   var Sm = (function () {
       function Sm() {
 
@@ -8181,22 +8224,37 @@ var PS = {};
           if (v instanceof FileSet) {
               return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Halogen_Query.getHTMLElementRef(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("input")))(function (v1) {
                   return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)((function () {
-                      var $13 = Control_Bind.bind(Data_Maybe.bindMaybe)(v1)(DOM_Classy_HTMLElement.fromHTMLElement(DOM_Classy_HTMLElement.isHTMLElementHTMLInputElement));
-                      if ($13 instanceof Data_Maybe.Just) {
-                          return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_HTMLInputElement.files($13.value0)))(function (v2) {
-                              var $15 = Control_Bind.bind(Data_Maybe.bindMaybe)(Data_Nullable.toMaybe(v2))(function ($33) {
-                                  return Data_Nullable.toMaybe(DOM_File_FileList.item(0)($33));
+                      var $17 = Control_Bind.bind(Data_Maybe.bindMaybe)(v1)(DOM_Classy_HTMLElement.fromHTMLElement(DOM_Classy_HTMLElement.isHTMLElementHTMLInputElement));
+                      if ($17 instanceof Data_Maybe.Just) {
+                          return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_HTMLInputElement.files($17.value0)))(function (v2) {
+                              var $19 = Control_Bind.bind(Data_Maybe.bindMaybe)(Data_Nullable.toMaybe(v2))(function ($42) {
+                                  return Data_Nullable.toMaybe(DOM_File_FileList.item(0)($42));
                               });
-                              if ($15 instanceof Data_Maybe.Just) {
-                                  return Control_Monad_State_Class.modify(Halogen_Query_HalogenM.monadStateHalogenM)(function (s) {
-                                      var $16 = {};
-                                      for (var $17 in s) {
-                                          if ({}.hasOwnProperty.call(s, $17)) {
-                                              $16[$17] = s[$17];
-                                          };
-                                      };
-                                      $16.file = Data_Maybe.Just.create(Data_Newtype.wrap(newtypeFilePath)($foreign.createObjectURL($15.value0)));
-                                      return $16;
+                              if ($19 instanceof Data_Maybe.Just) {
+                                  return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(Control_Bind.bindFlipped(Control_Monad_Eff.bindEff)(DOM_HTML_Window.url)(DOM_HTML.window)))(function (v3) {
+                                      return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_URL.createObjectURL($19.value0)(v3)))(function (v4) {
+                                          return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_State_Class.gets(Halogen_Query_HalogenM.monadStateHalogenM)(function (v5) {
+                                              return v5.file;
+                                          }))(function (v5) {
+                                              return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)((function () {
+                                                  if (v5 instanceof Data_Maybe.Just) {
+                                                      return Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_URL.revokeObjectURL(Data_Newtype.unwrap(newtypeFilePath)(v5.value0))(v3));
+                                                  };
+                                                  return Control_Applicative.pure(Halogen_Query_HalogenM.applicativeHalogenM)(Data_Unit.unit);
+                                              })())(function () {
+                                                  return Control_Monad_State_Class.modify(Halogen_Query_HalogenM.monadStateHalogenM)(function (s) {
+                                                      var $25 = {};
+                                                      for (var $26 in s) {
+                                                          if ({}.hasOwnProperty.call(s, $26)) {
+                                                              $25[$26] = s[$26];
+                                                          };
+                                                      };
+                                                      $25.file = Data_Maybe.Just.create(Data_Newtype.wrap(newtypeFilePath)(v4));
+                                                      return $25;
+                                                  });
+                                              });
+                                          });
+                                      });
                                   });
                               };
                               return Control_Monad_Aff_Class.liftAff(Halogen_Query_HalogenM.monadAffHalogenM(Control_Monad_Aff_Class.monadAffAff))(Control_Monad_Aff_Console.log("No file found"));
@@ -8219,7 +8277,7 @@ var PS = {};
                   if (v.value1 instanceof Sm) {
                       return 5.0;
                   };
-                  throw new Error("Failed pattern match at Main line 113, column 18 - line 117, column 7: " + [ v.value1.constructor.name ]);
+                  throw new Error("Failed pattern match at Main line 122, column 18 - line 126, column 7: " + [ v.value1.constructor.name ]);
               })();
               var delta = skip * (function () {
                   if (v.value0 instanceof Bck) {
@@ -8229,9 +8287,9 @@ var PS = {};
               })();
               return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Halogen_Query.getHTMLElementRef(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("audio")))(function (v1) {
                   return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)((function () {
-                      var $25 = Control_Bind.bind(Data_Maybe.bindMaybe)(v1)(DOM_Classy_HTMLElement.fromHTMLElement(DOM_Classy_HTMLElement.isHTMLElementHTMLAudioElement));
-                      if ($25 instanceof Data_Maybe.Just) {
-                          var el$prime = DOM_HTML_Types.htmlAudioElementToHTMLMediaElement($25.value0);
+                      var $34 = Control_Bind.bind(Data_Maybe.bindMaybe)(v1)(DOM_Classy_HTMLElement.fromHTMLElement(DOM_Classy_HTMLElement.isHTMLElementHTMLAudioElement));
+                      if ($34 instanceof Data_Maybe.Just) {
+                          var el$prime = DOM_HTML_Types.htmlAudioElementToHTMLMediaElement($34.value0);
                           return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_HTMLMediaElement.currentTime(el$prime)))(function (v2) {
                               return Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_HTMLMediaElement.setCurrentTime(v2 + delta)(el$prime));
                           });
@@ -8242,7 +8300,7 @@ var PS = {};
                   });
               });
           };
-          throw new Error("Failed pattern match at Main line 99, column 5 - line 110, column 16: " + [ v.constructor.name ]);
+          throw new Error("Failed pattern match at Main line 101, column 5 - line 119, column 16: " + [ v.constructor.name ]);
       };
       return Halogen_Component.component(Halogen_HTML_Core.bifunctorHTML)({
           initialState: Data_Function["const"](initialState), 
@@ -8269,7 +8327,6 @@ var PS = {};
   exports["ui"] = ui;
   exports["newtypeFilePath"] = newtypeFilePath;
   exports["filePathShow"] = filePathShow;
-  exports["createObjectURL"] = $foreign.createObjectURL;
 })(PS["Main"] = PS["Main"] || {});
 PS["Main"].main();
 
