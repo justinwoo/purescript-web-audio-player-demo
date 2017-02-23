@@ -16,10 +16,12 @@ import Control.Monad.Eff.Ref (REF)
 import DOM (DOM)
 import DOM.Classy.HTMLElement (fromHTMLElement)
 import DOM.File.FileList (item)
-import DOM.File.Types (File)
+import DOM.HTML (window)
 import DOM.HTML.HTMLInputElement (files)
 import DOM.HTML.HTMLMediaElement (currentTime, setCurrentTime)
 import DOM.HTML.Types (htmlAudioElementToHTMLMediaElement)
+import DOM.HTML.URL (createObjectURL, revokeObjectURL)
+import DOM.HTML.Window (url)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (class Newtype, unwrap, wrap)
 import Data.Nullable (toMaybe)
@@ -102,9 +104,16 @@ ui =
         Just el -> do
           nxs <- H.liftEff <<< files $ el
           case toMaybe nxs >>= toMaybe <<< item 0 of
-            Just file ->
+            Just file -> do
+              url <- H.liftEff $ url =<< window
+              blob <- H.liftEff $ createObjectURL file url
+              prevBlob <- H.gets _.file
+              case prevBlob of
+                Just x ->
+                  H.liftEff $ revokeObjectURL (unwrap x) url
+                _ -> pure unit
               H.modify \s ->
-                s {file = Just <<< wrap <<< createObjectURL $ file}
+                s {file = Just <<< wrap $ blob}
             _ -> H.liftAff $ log "No file found"
         _ -> H.liftAff $ log "No input ref found"
       pure next
@@ -125,8 +134,6 @@ ui =
           H.liftEff $ setCurrentTime (current + delta) el'
         _ -> H.liftAff $ log "No audio ref found"
       pure next
-
-foreign import createObjectURL :: File -> String
 
 main :: forall e.
   Eff
