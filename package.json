@@ -8,6 +8,7 @@
   },
   "scripts": {
     "start": "pulp -w browserify --to dist/app.js",
+    "build": "pulp browserify -O --to dist/app.js",
     "test": "pulp test"
   },
   "author": "",
