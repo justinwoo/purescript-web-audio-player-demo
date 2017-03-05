@@ -28,7 +28,6 @@ import Data.Nullable (toMaybe)
 
 newtype ObjectURL = ObjectURL String
 derive instance newtypeFilePath :: Newtype ObjectURL _
-derive newtype instance filePathShow :: Show ObjectURL
 
 type State =
   { file :: Maybe ObjectURL
@@ -119,13 +118,6 @@ ui =
       pure next
 
     eval (Skip dir size next) = do
-      let skip = case size of
-            Lg -> 30.0
-            Md -> 10.0
-            Sm -> 5.0
-      let delta = skip * case dir of
-            Bck -> -1.0
-            _ -> 1.0
       audio <- H.getHTMLElementRef $ wrap "audio"
       case audio >>= fromHTMLElement of
         Just el -> do
@@ -134,6 +126,14 @@ ui =
           H.liftEff $ setCurrentTime (current + delta) el'
         _ -> H.liftAff $ log "No audio ref found"
       pure next
+      where
+        skip = case size of
+          Lg -> 30.0
+          Md -> 10.0
+          Sm -> 5.0
+        delta = skip * case dir of
+          Bck -> -1.0
+          _ -> 1.0
 
 main :: forall e.
   Eff
