@@ -100,22 +100,25 @@ ui =
     eval (FileSet next) = do
       input <- H.getHTMLElementRef $ wrap "input"
       case input >>= fromHTMLElement of
-        Just el -> do
+        Nothing -> H.liftAff $ log "No input ref found"
+        Just el -> handleInput el
+      pure next
+      where
+        handleInput el = do
           nxs <- H.liftEff <<< files $ el
           case toMaybe nxs >>= toMaybe <<< item 0 of
-            Just file -> do
-              url <- H.liftEff $ url =<< window
-              blob <- H.liftEff $ createObjectURL file url
-              prevBlob <- H.gets _.file
-              case prevBlob of
-                Just x ->
-                  H.liftEff $ revokeObjectURL (unwrap x) url
-                _ -> pure unit
-              H.modify \s ->
-                s {file = Just <<< wrap $ blob}
-            _ -> H.liftAff $ log "No file found"
-        _ -> H.liftAff $ log "No input ref found"
-      pure next
+            Nothing -> H.liftAff $ log "No file found"
+            Just file -> handleFile file
+        handleFile file = do
+          url <- H.liftEff $ url =<< window
+          blob <- H.liftEff $ createObjectURL file url
+          prevBlob <- H.gets _.file
+          case prevBlob of
+            Just x ->
+              H.liftEff $ revokeObjectURL (unwrap x) url
+            _ -> pure unit
+          H.modify \s ->
+            s {file = Just <<< wrap $ blob}
 
     eval (Skip dir size next) = do
       audio <- H.getHTMLElementRef $ wrap "audio"
