@@ -24,7 +24,6 @@ import DOM.HTML.URL (createObjectURL, revokeObjectURL)
 import DOM.HTML.Window (url)
 import Data.Maybe (Maybe(..), fromMaybe)
 import Data.Newtype (class Newtype, unwrap, wrap)
-import Data.Nullable (toMaybe)
 
 newtype ObjectURL = ObjectURL String
 derive instance newtypeFilePath :: Newtype ObjectURL _
@@ -106,7 +105,7 @@ ui =
       where
         handleInput el = do
           nxs <- H.liftEff <<< files $ el
-          case toMaybe nxs >>= toMaybe <<< item 0 of
+          case nxs >>= item 0 of
             Nothing -> H.liftAff $ log "No file found"
             Just file -> handleFile file
         handleFile file = do
@@ -142,7 +141,7 @@ main :: forall e.
   Eff
     ( avar :: AVAR
     , ref :: REF
-    , err :: EXCEPTION
+    , exception :: EXCEPTION
     , dom :: DOM
     , console :: CONSOLE
     | e
