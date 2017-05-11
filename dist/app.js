@@ -1461,7 +1461,14 @@ var PS = {};
   };
   var runExceptT = function (v) {
       return v;
-  }; 
+  };          
+  var monadTransExceptT = new Control_Monad_Trans_Class.MonadTrans(function (dictMonad) {
+      return function (m) {
+          return Control_Bind.bind(dictMonad.Bind1())(m)(function (v) {
+              return Control_Applicative.pure(dictMonad.Applicative0())(new Data_Either.Right(v));
+          });
+      };
+  });
   var mapExceptT = function (f) {
       return function (v) {
           return f(v);
@@ -1526,6 +1533,7 @@ var PS = {};
   exports["applicativeExceptT"] = applicativeExceptT;
   exports["bindExceptT"] = bindExceptT;
   exports["monadExceptT"] = monadExceptT;
+  exports["monadTransExceptT"] = monadTransExceptT;
   exports["monadThrowExceptT"] = monadThrowExceptT;
 })(PS["Control.Monad.Except.Trans"] = PS["Control.Monad.Except.Trans"] || {});
 (function(exports) {
@@ -8135,7 +8143,11 @@ var PS = {};
   var Control_Monad_Eff_Class = PS["Control.Monad.Eff.Class"];
   var Control_Monad_Eff_Exception = PS["Control.Monad.Eff.Exception"];
   var Control_Monad_Eff_Ref = PS["Control.Monad.Eff.Ref"];
+  var Control_Monad_Error_Class = PS["Control.Monad.Error.Class"];
+  var Control_Monad_Except = PS["Control.Monad.Except"];
+  var Control_Monad_Except_Trans = PS["Control.Monad.Except.Trans"];
   var Control_Monad_State_Class = PS["Control.Monad.State.Class"];
+  var Control_Monad_Trans_Class = PS["Control.Monad.Trans.Class"];
   var Control_Semigroupoid = PS["Control.Semigroupoid"];
   var DOM = PS["DOM"];
   var DOM_Classy_HTMLElement = PS["DOM.Classy.HTMLElement"];
@@ -8147,6 +8159,7 @@ var PS = {};
   var DOM_HTML_Types = PS["DOM.HTML.Types"];
   var DOM_HTML_URL = PS["DOM.HTML.URL"];
   var DOM_HTML_Window = PS["DOM.HTML.Window"];
+  var Data_Either = PS["Data.Either"];
   var Data_Function = PS["Data.Function"];
   var Data_Functor = PS["Data.Functor"];
   var Data_Maybe = PS["Data.Maybe"];
@@ -8237,63 +8250,58 @@ var PS = {};
       var render = function (state) {
           return Halogen_HTML_Elements.div([ Halogen_HTML_Properties.class_(Data_Newtype.wrap(Halogen_HTML_Core.newtypeClassName)("container")) ])([ Halogen_HTML_Elements.div([ Halogen_HTML_Properties.class_(Data_Newtype.wrap(Halogen_HTML_Core.newtypeClassName)("root")) ])([ Halogen_HTML_Elements.h1_([ Halogen_HTML_Core.text("glorious web audio thing") ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.input([ Halogen_HTML_Properties.ref(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("input")), Halogen_HTML_Properties.type_(Halogen_HTML_Core.inputTypeIsProp)(DOM_HTML_Indexed_InputType.InputFile.value), Halogen_HTML_Properties.prop(Halogen_HTML_Core.stringIsProp)(Data_Newtype.wrap(Halogen_HTML_Core.newtypePropName)("accept"))("audio/*"), Halogen_HTML_Events.onChange(Halogen_HTML_Events.input_(FileSet.create)) ]) ]), Halogen_HTML_Elements.div_([ Halogen_HTML_Elements.audio([ Halogen_HTML_Properties.ref(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("audio")), Halogen_HTML_Properties.src(Data_Maybe.fromMaybe("")(Data_Functor.map(Data_Maybe.functorMaybe)(Data_Newtype.unwrap(newtypeFilePath))(state.file))), Halogen_HTML_Properties.controls(true), Halogen_HTML_Properties.autoplay(true) ])([  ]) ]), Halogen_HTML_Elements.div([ Halogen_HTML_Properties.class_(Data_Newtype.wrap(Halogen_HTML_Core.newtypeClassName)("buttons")) ])([ Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Lg.value))) ])([ Halogen_HTML_Elements.label_([ Halogen_HTML_Core.text("<<<") ]) ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Md.value))) ])([ Halogen_HTML_Elements.label_([ Halogen_HTML_Core.text("<<") ]) ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Bck.value)(Sm.value))) ])([ Halogen_HTML_Elements.label_([ Halogen_HTML_Core.text("<") ]) ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Sm.value))) ])([ Halogen_HTML_Elements.label_([ Halogen_HTML_Core.text(">") ]) ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Md.value))) ])([ Halogen_HTML_Elements.label_([ Halogen_HTML_Core.text(">>") ]) ]), Halogen_HTML_Elements.button([ Halogen_HTML_Events.onClick(Halogen_HTML_Events.input_(Skip.create(Fwd.value)(Lg.value))) ])([ Halogen_HTML_Elements.label_([ Halogen_HTML_Core.text(">>>") ]) ]) ]) ]) ]);
       };
-      var log$prime = function ($45) {
-          return Control_Monad_Aff_Class.liftAff(Halogen_Query_HalogenM.monadAffHalogenM(Control_Monad_Aff_Class.monadAffAff))(Control_Monad_Aff_Console.log($45));
+      var log$prime = function ($47) {
+          return Control_Monad_Aff_Class.liftAff(Halogen_Query_HalogenM.monadAffHalogenM(Control_Monad_Aff_Class.monadAffAff))(Control_Monad_Aff_Console.log($47));
       };
       var initialState = {
           file: Data_Maybe.Nothing.value
       };
       var $$eval = function (v) {
           if (v instanceof FileSet) {
-              var handleFile = function (file) {
-                  return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(Control_Bind.bindFlipped(Control_Monad_Eff.bindEff)(DOM_HTML_Window.url)(DOM_HTML.window)))(function (v1) {
-                      return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_URL.createObjectURL(file)(v1)))(function (v2) {
-                          return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_State_Class.gets(Halogen_Query_HalogenM.monadStateHalogenM)(function (v3) {
-                              return v3.file;
-                          }))(function (v3) {
-                              return Control_Bind.discard(Control_Bind.discardUnit)(Halogen_Query_HalogenM.bindHalogenM)((function () {
-                                  if (v3 instanceof Data_Maybe.Just) {
-                                      return Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_URL.revokeObjectURL(Data_Newtype.unwrap(newtypeFilePath)(v3.value0))(v1));
-                                  };
-                                  return Control_Applicative.pure(Halogen_Query_HalogenM.applicativeHalogenM)(Data_Unit.unit);
-                              })())(function () {
-                                  return Control_Monad_State_Class.modify(Halogen_Query_HalogenM.monadStateHalogenM)(function (s) {
-                                      var $24 = {};
-                                      for (var $25 in s) {
-                                          if ({}.hasOwnProperty.call(s, $25)) {
-                                              $24[$25] = s[$25];
+              var onNothing = function (dictMonad) {
+                  return function (s) {
+                      return Data_Maybe.maybe(Control_Monad_Error_Class.throwError(Control_Monad_Except_Trans.monadThrowExceptT(dictMonad))(s))(Control_Applicative.pure(Control_Monad_Except_Trans.applicativeExceptT(dictMonad)));
+                  };
+              };
+              return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Except_Trans.runExceptT(Control_Bind.bind(Control_Monad_Except_Trans.bindExceptT(Halogen_Query_HalogenM.monadHalogenM))(Control_Bind.bindFlipped(Control_Monad_Except_Trans.bindExceptT(Halogen_Query_HalogenM.monadHalogenM))(onNothing(Halogen_Query_HalogenM.monadHalogenM)("no input found"))(Control_Monad_Trans_Class.lift(Control_Monad_Except_Trans.monadTransExceptT)(Halogen_Query_HalogenM.monadHalogenM)(Halogen_Query.getHTMLElementRef(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("input")))))(function (v1) {
+                  return Control_Bind.bind(Control_Monad_Except_Trans.bindExceptT(Halogen_Query_HalogenM.monadHalogenM))(onNothing(Halogen_Query_HalogenM.monadHalogenM)("conversion failed")(DOM_Classy_HTMLElement.fromHTMLElement(DOM_Classy_HTMLElement.isHTMLElementHTMLInputElement)(v1)))(function (v2) {
+                      return Control_Bind.bind(Control_Monad_Except_Trans.bindExceptT(Halogen_Query_HalogenM.monadHalogenM))(Control_Bind.bindFlipped(Control_Monad_Except_Trans.bindExceptT(Halogen_Query_HalogenM.monadHalogenM))(onNothing(Halogen_Query_HalogenM.monadHalogenM)("no file found"))(Control_Monad_Trans_Class.lift(Control_Monad_Except_Trans.monadTransExceptT)(Halogen_Query_HalogenM.monadHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_HTMLInputElement.files(v2)))))(function (v3) {
+                          return onNothing(Halogen_Query_HalogenM.monadHalogenM)("files was empty")(DOM_File_FileList.item(0)(v3));
+                      });
+                  });
+              })))(function (v1) {
+                  return Control_Bind.discard(Control_Bind.discardUnit)(Halogen_Query_HalogenM.bindHalogenM)((function () {
+                      if (v1 instanceof Data_Either.Left) {
+                          return log$prime(v1.value0);
+                      };
+                      if (v1 instanceof Data_Either.Right) {
+                          return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(Control_Bind.bindFlipped(Control_Monad_Eff.bindEff)(DOM_HTML_Window.url)(DOM_HTML.window)))(function (v2) {
+                              return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_URL.createObjectURL(v1.value0)(v2)))(function (v3) {
+                                  return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_State_Class.gets(Halogen_Query_HalogenM.monadStateHalogenM)(function (v4) {
+                                      return v4.file;
+                                  }))(function (v4) {
+                                      return Control_Bind.discard(Control_Bind.discardUnit)(Halogen_Query_HalogenM.bindHalogenM)((function () {
+                                          if (v4 instanceof Data_Maybe.Just) {
+                                              return Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_URL.revokeObjectURL(Data_Newtype.unwrap(newtypeFilePath)(v4.value0))(v2));
                                           };
-                                      };
-                                      $24.file = Control_Applicative.pure(Data_Maybe.applicativeMaybe)(Data_Newtype.wrap(newtypeFilePath)(v2));
-                                      return $24;
+                                          return Control_Applicative.pure(Halogen_Query_HalogenM.applicativeHalogenM)(Data_Unit.unit);
+                                      })())(function () {
+                                          return Control_Monad_State_Class.modify(Halogen_Query_HalogenM.monadStateHalogenM)(function (s) {
+                                              var $31 = {};
+                                              for (var $32 in s) {
+                                                  if ({}.hasOwnProperty.call(s, $32)) {
+                                                      $31[$32] = s[$32];
+                                                  };
+                                              };
+                                              $31.file = Control_Applicative.pure(Data_Maybe.applicativeMaybe)(Data_Newtype.wrap(newtypeFilePath)(v3));
+                                              return $31;
+                                          });
+                                      });
                                   });
                               });
                           });
-                      });
-                  });
-              };
-              var handleInput = function (el) {
-                  return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Control_Monad_Eff_Class.liftEff(Halogen_Query_HalogenM.monadEffHalogenM(Control_Monad_Aff.monadEffAff))(DOM_HTML_HTMLInputElement.files(el)))(function (v1) {
-                      var v2 = Control_Bind.bindFlipped(Data_Maybe.bindMaybe)(DOM_File_FileList.item(0))(v1);
-                      if (v2 instanceof Data_Maybe.Nothing) {
-                          return log$prime("No file found");
                       };
-                      if (v2 instanceof Data_Maybe.Just) {
-                          return handleFile(v2.value0);
-                      };
-                      throw new Error("Failed pattern match at Main line 109, column 11 - line 111, column 41: " + [ v2.constructor.name ]);
-                  });
-              };
-              return Control_Bind.bind(Halogen_Query_HalogenM.bindHalogenM)(Halogen_Query.getHTMLElementRef(Data_Newtype.wrap(Halogen_Query_InputF.newtypeRefLabel)("input")))(function (v1) {
-                  return Control_Bind.discard(Control_Bind.discardUnit)(Halogen_Query_HalogenM.bindHalogenM)((function () {
-                      var v2 = Control_Bind.bindFlipped(Data_Maybe.bindMaybe)(DOM_Classy_HTMLElement.fromHTMLElement(DOM_Classy_HTMLElement.isHTMLElementHTMLInputElement))(v1);
-                      if (v2 instanceof Data_Maybe.Nothing) {
-                          return log$prime("No input ref found");
-                      };
-                      if (v2 instanceof Data_Maybe.Just) {
-                          return handleInput(v2.value0);
-                      };
-                      throw new Error("Failed pattern match at Main line 102, column 7 - line 104, column 34: " + [ v2.constructor.name ]);
+                      throw new Error("Failed pattern match at Main line 110, column 7 - line 120, column 40: " + [ v1.constructor.name ]);
                   })())(function () {
                       return Control_Applicative.pure(Halogen_Query_HalogenM.applicativeHalogenM)(v.value0);
                   });
@@ -8310,7 +8318,7 @@ var PS = {};
                   if (v.value1 instanceof Sm) {
                       return 5.0;
                   };
-                  throw new Error("Failed pattern match at Main line 131, column 16 - line 135, column 9: " + [ v.value1.constructor.name ]);
+                  throw new Error("Failed pattern match at Main line 135, column 16 - line 139, column 9: " + [ v.value1.constructor.name ]);
               })();
               var delta = skip * (function () {
                   if (v.value0 instanceof Bck) {
@@ -8332,7 +8340,7 @@ var PS = {};
                   });
               });
           };
-          throw new Error("Failed pattern match at Main line 100, column 5 - line 120, column 40: " + [ v.constructor.name ]);
+          throw new Error("Failed pattern match at Main line 104, column 5 - line 124, column 48: " + [ v.constructor.name ]);
       };
       return Halogen_Component.component(Halogen_HTML_Core.bifunctorHTML)({
           initialState: Data_Function["const"](initialState), 

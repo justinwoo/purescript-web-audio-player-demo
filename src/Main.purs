@@ -13,6 +13,9 @@ import Control.Monad.Aff.Console (CONSOLE, log)
 import Control.Monad.Eff (Eff)
 import Control.Monad.Eff.Exception (EXCEPTION)
 import Control.Monad.Eff.Ref (REF)
+import Control.Monad.Error.Class (throwError)
+import Control.Monad.Except (ExceptT)
+import Control.Monad.Except.Trans (lift, runExceptT)
 import DOM (DOM)
 import DOM.Classy.HTMLElement (fromHTMLElement)
 import DOM.File.FileList (item)
@@ -22,7 +25,8 @@ import DOM.HTML.HTMLMediaElement (currentTime, setCurrentTime)
 import DOM.HTML.Types (htmlAudioElementToHTMLMediaElement)
 import DOM.HTML.URL (createObjectURL, revokeObjectURL)
 import DOM.HTML.Window (url)
-import Data.Maybe (Maybe(..), fromMaybe)
+import Data.Either (Either(..))
+import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Newtype (class Newtype, unwrap, wrap)
 
 newtype ObjectURL = ObjectURL String
@@ -98,18 +102,14 @@ ui =
 
     eval :: Query ~> H.ComponentDSL State Query Void (Aff (AppEffects eff))
     eval (FileSet next) = do
-      input <- H.getHTMLElementRef $ wrap "input"
-      case fromHTMLElement =<< input of
-        Nothing -> log' "No input ref found"
-        Just el -> handleInput el
-      pure next
-      where
-        handleInput el = do
-          nxs <- H.liftEff $ files el
-          case item 0 =<< nxs of
-            Nothing -> log' "No file found"
-            Just file -> handleFile file
-        handleFile file = do
+      result <- runExceptT do
+        em <- onNothing "no input found" =<< (lift <<< H.getHTMLElementRef $ wrap "input")
+        el <- onNothing "conversion failed" $ fromHTMLElement em
+        fs <- onNothing "no file found" =<< (lift <<< H.liftEff <<< files $ el)
+        onNothing "files was empty" $ item 0 fs
+      case result of
+        Left e -> log' e
+        Right file -> do
           url <- H.liftEff $ url =<< window
           blob <- H.liftEff $ createObjectURL file url
           prevBlob <- H.gets _.file
@@ -118,6 +118,10 @@ ui =
             _ -> pure unit
           H.modify \s ->
             s {file = pure $ wrap blob}
+      pure next
+      where
+        onNothing :: forall m. Monad m => String -> Maybe ~> ExceptT String m
+        onNothing s = maybe (throwError s) pure
 
     eval (Skip dir size next) = do
       audio <- H.getHTMLElementRef $ wrap "audio"
