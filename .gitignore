@@ -5,3 +5,6 @@
 /generated-docs/
 /.psc*
 /.psa*
+/.cache
+/build/
+package-lock.json
