@@ -8,11 +8,12 @@
   },
   "scripts": {
     "build": "pulp browserify -O --to build/app.js && parcel build build/app.js",
+    "build-no-parcel": "pulp browserify -O --to dist/app.js",
     "test": "pulp test"
   },
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "parcel-bundler": "^1.2.0"
+    "parcel-bundler": "^1.5.1"
   }
 }

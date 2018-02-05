@@ -32,6 +32,11 @@ input, audio {
   flex-wrap: wrap;
   justify-content: center;
 }
+.speed {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
 button {
   display: flex;
   height: 50px;

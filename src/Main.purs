@@ -1,12 +1,7 @@
 module Main where
 
 import Prelude
-import Halogen as H
-import Halogen.Aff as HA
-import Halogen.HTML as HH
-import Halogen.HTML.Events as HE
-import Halogen.HTML.Properties as HP
-import Halogen.VDom.Driver as D
+
 import Control.Monad.Aff (Aff)
 import Control.Monad.Aff.AVar (AVAR)
 import Control.Monad.Aff.Console (CONSOLE, log)
@@ -21,13 +16,19 @@ import DOM.Classy.HTMLElement (fromHTMLElement)
 import DOM.File.FileList (item)
 import DOM.HTML (window)
 import DOM.HTML.HTMLInputElement (files)
-import DOM.HTML.HTMLMediaElement (currentTime, setCurrentTime)
+import DOM.HTML.HTMLMediaElement (currentTime, setCurrentTime, setPlaybackRate)
 import DOM.HTML.Types (htmlAudioElementToHTMLMediaElement)
 import DOM.HTML.URL (createObjectURL, revokeObjectURL)
 import DOM.HTML.Window (url)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Newtype (class Newtype, unwrap, wrap)
+import Halogen as H
+import Halogen.Aff as HA
+import Halogen.HTML as HH
+import Halogen.HTML.Events as HE
+import Halogen.HTML.Properties as HP
+import Halogen.VDom.Driver as D
 
 newtype ObjectURL = ObjectURL String
 derive instance newtypeFilePath :: Newtype ObjectURL _
@@ -38,10 +39,12 @@ type State =
 
 data SkipDir = Bck | Fwd
 data SkipSize = Sm | Md | Lg
+data Speed = One | OneHalf | Two
 
 data Query a
   = FileSet a
   | Skip SkipDir SkipSize a
+  | SetSpeed Speed a
 
 type AppEffects eff =
   ( console :: CONSOLE
@@ -95,6 +98,12 @@ ui =
               , HH.button [HE.onClick $ HE.input_ (Skip Fwd Md)] [HH.label_ [HH.text ">>"]]
               , HH.button [HE.onClick $ HE.input_ (Skip Fwd Lg)] [HH.label_ [HH.text ">>>"]]
               ]
+          , HH.div
+              [ HP.class_ $ wrap "speed" ]
+              [ HH.button [HE.onClick $ HE.input_ (SetSpeed One)] [HH.label_ [HH.text "1x"]]
+              , HH.button [HE.onClick $ HE.input_ (SetSpeed OneHalf)] [HH.label_ [HH.text "1.5x"]]
+              , HH.button [HE.onClick $ HE.input_ (SetSpeed Two)] [HH.label_ [HH.text "2x"]]
+              ]
           ]
       ]
 
@@ -139,6 +148,18 @@ ui =
         delta = skip * case dir of
           Bck -> -1.0
           _ -> 1.0
+    eval (SetSpeed speed next) = do
+      audio <- H.getHTMLElementRef $ wrap "audio"
+      case htmlAudioElementToHTMLMediaElement <$> (fromHTMLElement =<< audio) of
+        Just el -> do
+          H.liftEff $ setPlaybackRate rate el
+        _ -> log' "No audio ref found"
+      pure next
+      where
+        rate = case speed of
+          One -> 1.0
+          OneHalf -> 1.5
+          Two -> 2.0
 
 main :: forall e.
   Eff
