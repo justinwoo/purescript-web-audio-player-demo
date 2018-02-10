@@ -17,10 +17,10 @@
   text-align: center;
 }
 div + div {
-  margin-top: 40px;
+  margin-top: 10px;
 }
 h1 {
-  font-size: 64px;
+  font-size: 52px;
 }
 input, audio {
   width: 100%;
