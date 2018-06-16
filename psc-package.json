@@ -1,12 +1,11 @@
 {
-    "name": "purescript-web-audio-player-demo",
-    "set": "liebeslied",
-    "source": "https://github.com/justinwoo/package-sets.git",
-    "depends": [
-        "prelude",
-        "console",
-        "halogen",
-        "dom-classy",
-        "dom"
-    ]
+  "name": "purescript-web-audio-player-demo",
+  "set": "160618",
+  "source": "https://github.com/justinwoo/spacchetti.git",
+  "depends": [
+    "console",
+    "halogen",
+    "prelude",
+    "web-dom"
+  ]
 }

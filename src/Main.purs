@@ -2,39 +2,36 @@ module Main where
 
 import Prelude
 
-import Control.Monad.Aff (Aff)
-import Control.Monad.Aff.AVar (AVAR)
-import Control.Monad.Aff.Console (CONSOLE, log)
-import Control.Monad.Eff (Eff)
-import Control.Monad.Eff.Exception (EXCEPTION)
-import Control.Monad.Eff.Ref (REF)
 import Control.Monad.Error.Class (throwError)
 import Control.Monad.Except (ExceptT)
 import Control.Monad.Except.Trans (lift, runExceptT)
-import DOM (DOM)
-import DOM.Classy.HTMLElement (fromHTMLElement)
-import DOM.File.FileList (item)
-import DOM.HTML (window)
-import DOM.HTML.HTMLInputElement (files)
-import DOM.HTML.HTMLMediaElement (currentTime, setCurrentTime, setPlaybackRate)
-import DOM.HTML.Types (htmlAudioElementToHTMLMediaElement)
-import DOM.HTML.URL (createObjectURL, revokeObjectURL)
-import DOM.HTML.Window (url)
 import Data.Either (Either(..))
 import Data.Maybe (Maybe(..), fromMaybe, maybe)
 import Data.Newtype (class Newtype, unwrap, wrap)
+import Effect (Effect)
+import Effect.Aff (Aff)
+import Effect.Class.Console (log)
 import Halogen as H
 import Halogen.Aff as HA
 import Halogen.HTML as HH
 import Halogen.HTML.Events as HE
 import Halogen.HTML.Properties as HP
 import Halogen.VDom.Driver as D
+import Web.File.File (File)
+import Web.File.File as File
+import Web.File.FileList as FileList
+import Web.HTML.HTMLAudioElement as AudioElement
+import Web.HTML.HTMLInputElement as InputElement
+import Web.HTML.HTMLMediaElement (currentTime, setCurrentTime, setPlaybackRate)
 
 newtype ObjectURL = ObjectURL String
 derive instance newtypeFilePath :: Newtype ObjectURL _
 
+foreign import createObjectURL :: File -> Effect ObjectURL
+foreign import revokeObjectURL :: ObjectURL -> Effect Unit
+
 type State =
-  { file :: Maybe ObjectURL
+  { file :: Maybe { url :: ObjectURL, name :: String }
   }
 
 data SkipDir = Bck | Fwd
@@ -46,12 +43,8 @@ data Query a
   | Skip SkipDir SkipSize a
   | SetSpeed Speed a
 
-type AppEffects eff =
-  ( console :: CONSOLE
-  , dom :: DOM
-  | eff)
 
-ui :: forall eff. H.Component HH.HTML Query Unit Void (Aff (AppEffects eff))
+ui :: H.Component HH.HTML Query Unit Void Aff
 ui =
   H.component
     { initialState: const initialState
@@ -71,7 +64,11 @@ ui =
         [ HP.class_ $ wrap "container" ]
         [ HH.div
           [ HP.class_ $ wrap "root" ]
-          [ HH.h1_ [HH.text "glorious web audio thing"]
+          [ HH.h1_ [HH.text
+                      case (_.name <$> state.file) of
+                        Nothing -> "nothing playing currently"
+                        Just x -> "now playing: " <> x
+                   ]
           , HH.div_
             [ HH.input
               [ HP.ref $ wrap "input"
@@ -83,7 +80,7 @@ ui =
           , HH.div_
               [ HH.audio
                 [ HP.ref $ wrap "audio"
-                , HP.src $ fromMaybe "" (unwrap <$> state.file)
+                , HP.src $ fromMaybe "" (unwrap <<< _.url <$> state.file)
                 , HP.controls true
                 , HP.autoplay true
                 ]
@@ -109,24 +106,24 @@ ui =
 
     log' = H.liftAff <<< log
 
-    eval :: Query ~> H.ComponentDSL State Query Void (Aff (AppEffects eff))
+    eval :: Query ~> H.ComponentDSL State Query Void Aff
     eval (FileSet next) = do
       result <- runExceptT do
         em <- onNothing "no input found" =<< (lift <<< H.getHTMLElementRef $ wrap "input")
-        el <- onNothing "conversion failed" $ fromHTMLElement em
-        fs <- onNothing "no file found" =<< (lift <<< H.liftEff <<< files $ el)
-        onNothing "files was empty" $ item 0 fs
+        el <- onNothing "conversion failed" $ InputElement.fromHTMLElement em
+        fs <- onNothing "no file found" =<< (lift <<< H.liftEffect <<< InputElement.files $ el)
+        onNothing "files was empty" $ FileList.item 0 fs
       case result of
         Left e -> log' e
         Right file -> do
-          url <- H.liftEff $ url =<< window
-          blob <- H.liftEff $ createObjectURL file url
-          prevBlob <- H.gets _.file
-          case prevBlob of
-            Just x -> H.liftEff $ revokeObjectURL (unwrap x) url
+          blob <- H.liftEffect $ createObjectURL file
+          prevFile <- H.gets _.file
+          case prevFile of
+            Just { url } -> H.liftEffect $ revokeObjectURL url
             _ -> pure unit
-          H.modify \s ->
-            s {file = pure $ wrap blob}
+          H.modify_ \s ->
+            s {file = pure { url: blob, name: File.name file} }
+          pure unit
       pure next
       where
         onNothing :: forall m. Monad m => String -> Maybe ~> ExceptT String m
@@ -134,10 +131,10 @@ ui =
 
     eval (Skip dir size next) = do
       audio <- H.getHTMLElementRef $ wrap "audio"
-      case htmlAudioElementToHTMLMediaElement <$> (fromHTMLElement =<< audio) of
+      case AudioElement.toHTMLMediaElement <$> (AudioElement.fromHTMLElement =<< audio) of
         Just el -> do
-          current <- H.liftEff $ currentTime el
-          H.liftEff $ setCurrentTime (current + delta) el
+          current <- H.liftEffect $ currentTime el
+          H.liftEffect $ setCurrentTime (current + delta) el
         _ -> log' "No audio ref found"
       pure next
       where
@@ -150,9 +147,9 @@ ui =
           _ -> 1.0
     eval (SetSpeed speed next) = do
       audio <- H.getHTMLElementRef $ wrap "audio"
-      case htmlAudioElementToHTMLMediaElement <$> (fromHTMLElement =<< audio) of
+      case AudioElement.toHTMLMediaElement <$> (AudioElement.fromHTMLElement =<< audio) of
         Just el -> do
-          H.liftEff $ setPlaybackRate rate el
+          H.liftEffect $ setPlaybackRate rate el
         _ -> log' "No audio ref found"
       pure next
       where
@@ -161,16 +158,7 @@ ui =
           OneHalf -> 1.5
           Two -> 2.0
 
-main :: forall e.
-  Eff
-    (AppEffects
-      ( avar :: AVAR
-      , ref :: REF
-      , exception :: EXCEPTION
-      | e
-      )
-    )
-    Unit
+main :: Effect Unit
 main = HA.runHalogenAff do
   body <- HA.awaitBody
   io <- D.runUI ui unit body
