@@ -18,7 +18,8 @@ self.addEventListener("fetch", function(event) {
       if (response) {
         return response;
       } else {
-        alert("File Missing and cannot fetch while offline");
+        console.error("File Missing and cannot fetch while offline");
+        console.error("Event information: ", event)
         throw new Error("File Missing and cannot fetch while offline");
       }
     });
